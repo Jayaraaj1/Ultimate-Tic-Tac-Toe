@@ -18,37 +18,17 @@ class GameState():
                     return True
         
         return False
+    
+    def make_move(self, board_index, cell_index):
+        if(not(self.is_valid_move(board_index, cell_index))):
+            return False
+        self.board[board_index][cell_index] = self.current_player
+        if(self.local_status[cell_index] == ongoing):
+            self.active_board = cell_index
+        else:
+            self.active_board = None
+        self.current_player = -self.current_player
+        return True
             
 
 state = GameState()
-if True:
-    print("Test 1 - Normal opening move")
-    state = GameState()
-    print(state.is_valid_move(0, 0))  # Expected: True
-
-    print("\nTest 2 - Invalid indexes")
-    state = GameState()
-    print(state.is_valid_move(9, 0))   # Expected: False
-    print(state.is_valid_move(0, 9))   # Expected: False
-    print(state.is_valid_move(-1, 0))  # Expected: False
-
-    print("\nTest 3 - Occupied cell")
-    state = GameState()
-    state.board[0][0] = X
-    print(state.is_valid_move(0, 0))  # Expected: False
-
-    print("\nTest 4 - Forced local board")
-    state = GameState()
-    state.active_board = 4
-    print(state.is_valid_move(4, 3))  # Expected: True
-    print(state.is_valid_move(3, 3))  # Expected: False
-
-    print("\nTest 5 - Completed local board")
-    state = GameState()
-    state.local_status[6] = X
-    print(state.is_valid_move(6, 2))  # Expected: False
-
-    print("\nTest 6 - Finished overall game")
-    state = GameState()
-    state.game_status = X
-    print(state.is_valid_move(2, 5))  # Expected: False
