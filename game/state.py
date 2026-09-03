@@ -17,7 +17,6 @@ class GameState():
             if(not((self.active_board is not None) and (self.active_board != board_index))):
                 if(self.board[board_index][cell_index] == empty):
                     return True
-        
         return False
     
     def make_move(self, board_index, cell_index):
@@ -25,7 +24,10 @@ class GameState():
             return False
         self.board[board_index][cell_index] = self.current_player
         self.local_status[board_index] = self.check_local_board(board_index)
-        if(self.local_status[cell_index] == ongoing):
+        self.game_status = self.check_game_status()
+        if self.game_status != ongoing:
+            self.active_board = None
+        elif(self.local_status[cell_index] == ongoing):
             self.active_board = cell_index
         else:
             self.active_board = None
@@ -38,6 +40,15 @@ class GameState():
             if((self.board[board_index][a] != empty) and (self.board[board_index][a] == self.board[board_index][b] == self.board[board_index][c])):
                 return self.board[board_index][a]
         if empty not in self.board[board_index]:
+            return draw
+        return ongoing
+    
+    def check_game_status(self):
+        for line in winning_lines:
+            a, b, c = line
+            if((self.local_status[a] in (X, O)) and (self.local_status[a] == self.local_status[b] == self.local_status[c])):
+                return self.local_status[a]
+        if ongoing not in self.local_status:
             return draw
         return ongoing
             
