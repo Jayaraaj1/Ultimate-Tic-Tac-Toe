@@ -51,6 +51,11 @@ class GameState():
         if ongoing not in self.local_status:
             return draw
         return ongoing
-            
-
-state = GameState()
+    
+    def get_legal_moves(self):
+        legal_moves = []
+        for board_index in range(9):
+            for cell_index in range(9):
+                if self.is_valid_move(board_index, cell_index):
+                    legal_moves.append((board_index, cell_index))
+        return legal_moves
