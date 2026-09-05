@@ -1,8 +1,9 @@
 import pygame
+from ui.renderer import draw_grid, window_size
 
 pygame.init()
 
-screen = pygame.display.set_mode((900, 900))
+screen = pygame.display.set_mode((window_size, window_size))
 pygame.display.set_caption("Ultimate Tic-Tac-Toe")
 
 clock = pygame.time.Clock()
@@ -14,7 +15,7 @@ while running:
             running = False
 
     screen.fill("white")
-
+    draw_grid(screen)
     pygame.display.flip()
     clock.tick(60)
 
