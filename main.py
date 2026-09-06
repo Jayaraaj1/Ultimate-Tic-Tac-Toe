@@ -1,5 +1,6 @@
 import pygame
-from ui.renderer import draw_grid, window_size
+from game.state import GameState, X, O
+from ui.renderer import draw_grid, draw_pieces, window_size
 
 pygame.init()
 
@@ -8,6 +9,11 @@ pygame.display.set_caption("Ultimate Tic-Tac-Toe")
 
 clock = pygame.time.Clock()
 running = True
+state = GameState()
+state.board[0][0] = X
+state.board[0][4] = O
+state.board[4][4] = X
+state.board[8][8] = O
 
 while running:
     for event in pygame.event.get():
@@ -16,6 +22,7 @@ while running:
 
     screen.fill("white")
     draw_grid(screen)
+    draw_pieces(screen, state)
     pygame.display.flip()
     clock.tick(60)
 
