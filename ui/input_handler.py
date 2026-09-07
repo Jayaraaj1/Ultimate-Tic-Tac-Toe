@@ -17,3 +17,12 @@ def position_to_move(position):
     
     return (board_index, cell_index)
 
+def handle_click(state, position):
+    move = position_to_move(position)
+    if move is None:
+        return False
+    
+    board_index, cell_index = move
+    result = state.make_move(board_index, cell_index)
+    
+    return result

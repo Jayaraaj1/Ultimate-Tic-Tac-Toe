@@ -1,6 +1,7 @@
 import pygame
 from game.state import GameState, X, O
 from ui.renderer import draw_grid, draw_pieces, window_size
+from ui.input_handler import handle_click
 
 pygame.init()
 
@@ -10,15 +11,13 @@ pygame.display.set_caption("Ultimate Tic-Tac-Toe")
 clock = pygame.time.Clock()
 running = True
 state = GameState()
-state.board[0][0] = X
-state.board[0][4] = O
-state.board[4][4] = X
-state.board[8][8] = O
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            handle_click(state, event.pos)
 
     screen.fill("white")
     draw_grid(screen)
