@@ -1,18 +1,24 @@
 import pygame
-from game.state import X, O
+from game.state import X, O, draw, ongoing
 
 window_size = 900
+board_size = 300
 cell_size = 100
 padding = 20
+completed_padding = 40
 
 thin_line_width = 2
 thick_line_width = 6
+completed_piece_width = 12
 
 line_colour = "black"
 
 piece_width = 6
 piece_x_colour = "plum3"
 piece_o_colour = "gold3"
+
+playable_colour = "lavenderblush1"
+unplayable_colour = "ivory4"
 
 def draw_grid(screen):
     for i in range(1, 9):
@@ -48,3 +54,42 @@ def draw_pieces(screen, state):
             
             if value == O:
                 pygame.draw.circle(screen, piece_o_colour, (centre_x, centre_y), radius, piece_width)
+            
+def draw_board_backgrounds(screen, state):
+    for board_index in range(9):
+        board_row = board_index // 3
+        board_column = board_index % 3
+        x = board_column * board_size
+        y = board_row * board_size
+        rectangle = pygame.Rect(x, y, board_size, board_size)
+
+        if state.active_board is not None:
+            if state.active_board == board_index:
+                pygame.draw.rect(screen, playable_colour, rectangle)
+        elif state.local_status[board_index] == ongoing:
+            pygame.draw.rect(screen, playable_colour, rectangle)
+    
+def draw_completed_boards(screen, state):
+    for board_index in range(9):
+        board_row = board_index // 3
+        board_column = board_index % 3
+        x = board_column * board_size
+        y = board_row * board_size
+        centre_x = x + board_size // 2
+        centre_y = y + board_size // 2
+        radius = board_size // 2 - completed_padding
+        value = state.local_status[board_index]
+        rectangle = pygame.Rect(x + thick_line_width // 2, y + thick_line_width // 2, board_size - thick_line_width, board_size - thick_line_width)
+        
+        if value == X:
+            pygame.draw.rect(screen, unplayable_colour, rectangle)
+            pygame.draw.line(screen, piece_x_colour, (x + completed_padding, y + completed_padding), (x + board_size - completed_padding, y + board_size - completed_padding), completed_piece_width)
+            pygame.draw.line(screen, piece_x_colour, (x + completed_padding, y + board_size - completed_padding), (x + board_size - completed_padding, y + completed_padding), completed_piece_width)
+            
+        if value == O:
+            pygame.draw.rect(screen, unplayable_colour, rectangle)
+            pygame.draw.circle(screen, piece_o_colour, (centre_x, centre_y), radius, completed_piece_width)
+            
+        if value == draw:
+            pygame.draw.rect(screen, unplayable_colour, rectangle)
+    

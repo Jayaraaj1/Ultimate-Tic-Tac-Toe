@@ -1,6 +1,6 @@
 import pygame
 from game.state import GameState, X, O
-from ui.renderer import draw_grid, draw_pieces, window_size
+from ui.renderer import draw_grid, draw_pieces, draw_board_backgrounds, draw_completed_boards, window_size
 from ui.input_handler import handle_click
 
 pygame.init()
@@ -20,8 +20,10 @@ while running:
             handle_click(state, event.pos)
 
     screen.fill("white")
+    draw_board_backgrounds(screen, state)
     draw_grid(screen)
     draw_pieces(screen, state)
+    draw_completed_boards(screen, state)
     pygame.display.flip()
     clock.tick(60)
 
