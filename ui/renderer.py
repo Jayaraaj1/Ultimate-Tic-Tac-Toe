@@ -4,6 +4,8 @@ from game.state import X, O, draw, ongoing
 window_size = 900
 board_size = 300
 cell_size = 100
+panel_width = 500
+panel_height = 200
 padding = 20
 completed_padding = 40
 
@@ -92,4 +94,31 @@ def draw_completed_boards(screen, state):
             
         if value == draw:
             pygame.draw.rect(screen, unplayable_colour, rectangle)
+
+def draw_game_over(screen, state):
+    while state.game_status == ongoing:
+        return
+    winner_font = pygame.font.Font("fonts/monocraft/Monocraft.ttf", 72)
+    restart_font = pygame.font.Font("fonts/monocraft/Monocraft.ttf", 32)
     
+    panel_x = (window_size - panel_width) // 2
+    panel_y = (window_size - panel_height) // 2
+    panel = pygame.Rect(panel_x, panel_y, panel_width, panel_height)
+    pygame.draw.rect(screen, "white", panel)
+    pygame.draw.rect(screen, "black", panel, 4)
+    text_restart_surface = restart_font.render("Press R to Restart", True, "black")
+    text_restart_rectangle = text_restart_surface.get_rect(center=(window_size // 2, window_size // 2 + completed_padding))
+    screen.blit(text_restart_surface, text_restart_rectangle)
+    
+    if state.game_status == X:
+        text_surface = winner_font.render("X Wins!", True, "black")
+        text_rectangle = text_surface.get_rect(center=(window_size // 2, window_size // 2 - completed_padding))
+        screen.blit(text_surface, text_rectangle)
+    elif state.game_status == O:
+        text_surface = winner_font.render("O Wins!", True, "black")
+        text_rectangle = text_surface.get_rect(center=(window_size // 2, window_size // 2 - completed_padding))
+        screen.blit(text_surface, text_rectangle)
+    elif state.game_status == draw:
+        text_surface = winner_font.render("Draw", True, "black")
+        text_rectangle = text_surface.get_rect(center=(window_size // 2, window_size // 2 - completed_padding))
+        screen.blit(text_surface, text_rectangle)
