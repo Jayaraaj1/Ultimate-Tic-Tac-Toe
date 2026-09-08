@@ -1,9 +1,10 @@
 import pygame
 from game.state import X, O, draw, ongoing
+from pathlib import Path
 
 window_size = 900
-board_size = 300
 cell_size = 100
+board_size = cell_size * 3
 panel_width = 500
 panel_height = 200
 padding = 20
@@ -21,6 +22,8 @@ piece_o_colour = "gold3"
 
 playable_colour = "lavenderblush1"
 unplayable_colour = "ivory4"
+
+font_path = str(Path(__file__).resolve().parent.parent / "fonts" / "monocraft" / "Monocraft.ttf")
 
 def draw_grid(screen):
     for i in range(1, 9):
@@ -96,10 +99,10 @@ def draw_completed_boards(screen, state):
             pygame.draw.rect(screen, unplayable_colour, rectangle)
 
 def draw_game_over(screen, state):
-    while state.game_status == ongoing:
+    if state.game_status == ongoing:
         return
-    winner_font = pygame.font.Font("fonts/monocraft/Monocraft.ttf", 72)
-    restart_font = pygame.font.Font("fonts/monocraft/Monocraft.ttf", 32)
+    winner_font = pygame.font.Font(font_path, 72)
+    restart_font = pygame.font.Font(font_path, 32)
     
     panel_x = (window_size - panel_width) // 2
     panel_y = (window_size - panel_height) // 2
