@@ -1,7 +1,8 @@
 import pygame
-from game.state import GameState, ongoing
+from game.state import GameState, X, O, ongoing
 from ui.renderer import draw_grid, draw_pieces, draw_board_backgrounds, draw_completed_boards, draw_game_over, window_size
 from ui.input_handler import handle_click
+from ai.random_agent import RandomAgent
 
 pygame.init()
 
@@ -11,12 +12,21 @@ pygame.display.set_caption("Ultimate Tic-Tac-Toe")
 clock = pygame.time.Clock()
 running = True
 state = GameState()
+agent = RandomAgent()
+human_player = X
+ai_player = O
 
 while running:
+    if state.current_player == ai_player and state.game_status == ongoing:
+        move = agent.choose_move(state)
+        if move is not None:
+            board_index, cell_index = move
+            state.make_move(board_index, cell_index)
+                
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and state.current_player == human_player:
             handle_click(state, event.pos)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_r and state.game_status != ongoing:
             state = GameState()
